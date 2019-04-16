@@ -1,4 +1,4 @@
-from data_loader import Data
+from data_loader import DataLoader
 from retrieval_systems import Hist, HOG, DL
 
 data = Data()
