@@ -29,9 +29,9 @@ class Hist:
             return compressed
 
     def rank(self, query):
-        query = self.compress(query)
+        # query = self.compress(query)
         distances = cdist(query, self.database, metric='euclidean')
-        return np.argsort(distances)
+        return np.argsort(distances).reshape(-1)
 
 
 class HOG:
@@ -56,9 +56,9 @@ class HOG:
             return compressed
 
     def rank(self, query):
-        query = self.compress(query)
+        # query = self.compress(query)
         distances = cdist(query, self.database, metric='euclidean')
-        return np.argsort(distances)
+        return np.argsort(distances).reshape(-1)
 
 
 class DL:
@@ -79,6 +79,6 @@ class DL:
             return features
 
     def rank(self, query):
-        query = self.compress(query)
+        # query = self.compress(query)
         distances = cdist(query, self.database, metric='euclidean')
-        return np.argsort(distances)
+        return np.argsort(distances).reshape(-1)

@@ -1,13 +1,11 @@
-from keras.datasets import cifar10
-import matplotlib.pyplot as plt
-from skimage.feature import hog
+import numpy as np
+from sklearn.metrics import precision_score, recall_score
 
-(x, y), (_, _) = cifar10.load_data()
+labels = np.array([0, 2, 1, 2, 1, 0, 2, 1, 0])
+predictions = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0])
 
-image = x[0]
-fig = plt.figure()
-plt.imshow(image)
-features = hog(image, orientations=8, pixels_per_cell=(6, 6),
-               cells_per_block=(4, 4), block_norm='L2-Hys', multichannel=True)
-print(features.shape)
+precision = precision_score(labels, predictions, average='micro')
+recall = recall_score(labels, predictions, average='micro')
 
+print(f"Precision:  {precision:.3f}\n"
+      f"Recall:     {recall:.3f}\n")

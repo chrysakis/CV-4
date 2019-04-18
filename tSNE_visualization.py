@@ -16,35 +16,44 @@ print(hist)
 colors = ['blue', 'red', 'yellow', 'magenta', 'green', 'orange', 'gray',
           'cyan', 'purple', 'black']
 
-# Color histogram features
-hist = Hist(data)
-features = hist.database[:n, :]
+# Random features
+features = np.random.randn(n, 512)
 tsne = TSNE()
 embedded = tsne.fit_transform(features)
 figA = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
-figA.savefig('../plots/tsne_hist', dpi=1000)
+figA.savefig('../plots/tsne_random', dpi=1000)
+
+# Color histogram features
+hist = Hist(data)
+features = hist.database[:n, :]
+tsne = TSNE()
+embedded = tsne.fit_transform(features)
+figB = plt.figure()
+plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
+            cmap=matplotlib.colors.ListedColormap(colors))
+figB.savefig('../plots/tsne_hist', dpi=1000)
 
 # Histogram of oriented gradients features
 hog = HOG(data)
 features = hog.database[:n, :]
 tsne = TSNE()
 embedded = tsne.fit_transform(features)
-figB = plt.figure()
+figC = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
-figB.savefig('../plots/tsne_hog', dpi=1000)
+figC.savefig('../plots/tsne_hog', dpi=1000)
 
 # Deep learning features
 dl = DL(data)
 features = dl.database[:n, :]
 tsne = TSNE()
 embedded = tsne.fit_transform(features)
-figC = plt.figure()
+figD = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
-figC.savefig('../plots/tsne_dl', dpi=1000)
+figD.savefig('../plots/tsne_dl', dpi=1000)
 
 end = time.time()
 print(f"\nTime elapsed: {round((end-start)/60)} min.")
