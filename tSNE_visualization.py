@@ -7,10 +7,10 @@ import numpy as np
 import time
 
 start = time.time()
-n = 15000
-data_class = DataLoader()
-data = data_class.X_train
-labels = data_class.Y_train[:n]
+n = 20000
+data_class = DataLoader(n=n)
+data = data_class.X
+labels = data_class.Y
 hist, _ = np.histogram(labels)
 print(hist)
 colors = ['blue', 'red', 'yellow', 'magenta', 'green', 'orange', 'gray',

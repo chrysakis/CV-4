@@ -55,6 +55,17 @@ class HOG:
                 pickle.dump(compressed, file, pickle.HIGHEST_PROTOCOL)
             return compressed
 
+    @staticmethod
+    def compress_test(data):
+        compressed = []
+        for i, image in enumerate(data):
+            features = hog(image, orientations=8, pixels_per_cell=(6, 6),
+                           cells_per_block=(4, 4), block_norm='L2-Hys',
+                           multichannel=True)
+            compressed.append(features)
+        compressed = np.array(compressed)
+        return compressed
+
     def rank(self, query):
         # query = self.compress(query)
         distances = cdist(query, self.database, metric='euclidean')
@@ -77,6 +88,12 @@ class DL:
             with open('../data/DL_features.pkl', mode='wb') as file:
                 pickle.dump(features, file, pickle.HIGHEST_PROTOCOL)
             return features
+
+    def compress_test(self, data):
+        data = preprocess_input(data)
+        features = self.model.predict(data)
+        features = features.reshape(features.shape[0], features.shape[3])
+        return features
 
     def rank(self, query):
         # query = self.compress(query)
