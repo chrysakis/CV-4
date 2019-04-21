@@ -28,9 +28,9 @@ for index in test_indexes:
         plt.subplot(3, 4, 5+i)
         plt.imshow(x[top_4_indexes[i]])
         if i == 0:
-            plt.ylabel('Best 4 matches')
+            plt.ylabel('Best 4\nmatches')
         plt.subplot(3, 4, 9+i)
         plt.imshow(x[bottom_4_indexes[i]])
         if i == 0:
-            plt.ylabel('Worst 4 matches')
+            plt.ylabel('Worst 4\nmatches')
     plt.show()

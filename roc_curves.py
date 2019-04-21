@@ -18,7 +18,7 @@ dl = DL(x)
 
 # Compute precision-recall scores (average over the first 1000 samples of the
 # training set for all retrieval systems
-n = 4000
+n = 1000
 points = 15
 ranking = dict()
 true_positives = {'hist': np.zeros(points), 'hog': np.zeros(points),
@@ -30,7 +30,7 @@ for i in range(n):
     ranking['hist'] = hist.rank(hist.database[i, :].reshape(1, -1))[1:]
     ranking['hog'] = hog.rank(hog.database[i, :].reshape(1, -1))[1:]
     ranking['dl'] = dl.rank(dl.database[i, :].reshape(1, -1))[1:]
-    linspace = np.linspace(1, dataset_size - 2, points, dtype=np.uint32)
+    linspace = np.linspace(1, 2000, points, dtype=np.uint32)
     for j, threshold in enumerate(linspace):
         predictions = (np.ones(threshold),
                        np.zeros(dataset_size - threshold - 1))
@@ -40,9 +40,10 @@ for i in range(n):
             cm = confusion_matrix(truth, predictions, labels=(True, False))
             true_positives[method][j] += cm[0, 0] / 2000
             false_negatives[method][j] += cm[1, 0] / 18000
-        # print(sum(truth), sum(predictions), cm[0, 0], cm[0, 1])
+        # print(sum(truth), sum(predictions), cm, cm[0, 0], cm[0, 1], '\n')
     end = time.time()
-    print(f"Time per sample: {end - start:.3f} s")
+    if (i+1) % 25 == 0:
+        print(f"Time for sample {i+1}: {end - start:.3f} s")
 for method in ['hist', 'hog', 'dl']:
     true_positives[method] = true_positives[method] / n
     false_negatives[method] = false_negatives[method] / n
