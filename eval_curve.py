@@ -1,8 +1,6 @@
 from data_loader import DataLoader
 from retrieval_systems import Hist, HOG, DL
 import numpy as np
-from sklearn.metrics import confusion_matrix
-import time
 import matplotlib.pyplot as plt
 
 # Initialize data
@@ -18,15 +16,14 @@ dl = DL(x)
 
 # Compute precision-recall scores (average over the first 1000 samples of the
 # training set for all retrieval systems
-n = 1000
+n = 2000
 points = 15
 ranking = dict()
-true_positives = {'hist': np.zeros(points), 'hog': np.zeros(points),
-                  'dl': np.zeros(points)}
-false_negatives = {'hist': np.zeros(points), 'hog': np.zeros(points),
-                   'dl': np.zeros(points)}
+precision = {'hist': np.zeros(points), 'hog': np.zeros(points),
+             'dl': np.zeros(points)}
+recall = {'hist': np.zeros(points), 'hog': np.zeros(points),
+          'dl': np.zeros(points)}
 for i in range(n):
-    start = time.time()
     ranking['hist'] = hist.rank(hist.database[i, :].reshape(1, -1))[1:]
     ranking['hog'] = hog.rank(hog.database[i, :].reshape(1, -1))[1:]
     ranking['dl'] = dl.rank(dl.database[i, :].reshape(1, -1))[1:]
@@ -37,23 +34,19 @@ for i in range(n):
         predictions = np.concatenate(predictions) == 1
         for method in ['hist', 'hog', 'dl']:
             truth = labels[ranking[method]] == labels[i]
-            cm = confusion_matrix(truth, predictions, labels=(True, False))
-            true_positives[method][j] += cm[0, 0] / 2000
-            false_negatives[method][j] += cm[1, 0] / 18000
-        # print(sum(truth), sum(predictions), cm, cm[0, 0], cm[0, 1], '\n')
-    end = time.time()
-    if (i+1) % 25 == 0:
-        print(f"Time for sample {i+1}: {end - start:.3f} s")
+            true_positives = np.sum(np.bitwise_and(truth, predictions))
+            precision[method][j] += true_positives / threshold
+            recall[method][j] += true_positives / 2000
 for method in ['hist', 'hog', 'dl']:
-    true_positives[method] = true_positives[method] / n
-    false_negatives[method] = false_negatives[method] / n
+    precision[method] = precision[method] / n
+    recall[method] = recall[method] / n
 
 # Plot the curves
 fig = plt.figure()
 for method in ['hist', 'hog', 'dl']:
-    plt.plot(false_negatives[method], true_positives[method])
-plt.xlabel('False Negatives')
-plt.ylabel('True Positives')
-plt.title(f"{points}-point FN-TP curve")
+    plt.plot(recall[method], precision[method])
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.title(f"{points}-point precision-recall curve")
 plt.legend(('Histogram', 'HOG', 'VGG16'))
-plt.show()
+fig.savefig('../plots/pr_curve', dpi=1000)

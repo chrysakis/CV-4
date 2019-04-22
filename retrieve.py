@@ -33,4 +33,5 @@ for index in test_indexes:
         plt.imshow(x[bottom_4_indexes[i]])
         if i == 0:
             plt.ylabel('Worst 4\nmatches')
-    plt.show()
+    plt.tight_layout()
+    fig.savefig(f'../plots/retrieval{index}', dpi=1000)

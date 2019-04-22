@@ -10,7 +10,7 @@ start = time.time()
 n = 20000
 data_class = DataLoader(n=n)
 data = data_class.X
-labels = data_class.Y
+labels = data_class.Y.reshape(-1)
 hist, _ = np.histogram(labels)
 print(hist)
 colors = ['blue', 'red', 'yellow', 'magenta', 'green', 'orange', 'gray',
@@ -23,6 +23,9 @@ embedded = tsne.fit_transform(features)
 figA = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
+plt.xlabel('First embedded dimension')
+plt.ylabel('Second embedded dimension')
+plt.title('t-SNE visualization of Random features')
 figA.savefig('../plots/tsne_random', dpi=1000)
 
 # Color histogram features
@@ -33,6 +36,9 @@ embedded = tsne.fit_transform(features)
 figB = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
+plt.xlabel('First embedded dimension')
+plt.ylabel('Second embedded dimension')
+plt.title('t-SNE visualization of Histogram features')
 figB.savefig('../plots/tsne_hist', dpi=1000)
 
 # Histogram of oriented gradients features
@@ -43,6 +49,9 @@ embedded = tsne.fit_transform(features)
 figC = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
+plt.xlabel('First embedded dimension')
+plt.ylabel('Second embedded dimension')
+plt.title('t-SNE visualization of HOG features')
 figC.savefig('../plots/tsne_hog', dpi=1000)
 
 # Deep learning features
@@ -53,6 +62,9 @@ embedded = tsne.fit_transform(features)
 figD = plt.figure()
 plt.scatter(embedded[:, 0], embedded[:, 1], c=labels, s=3,
             cmap=matplotlib.colors.ListedColormap(colors))
+plt.xlabel('First embedded dimension')
+plt.ylabel('Second embedded dimension')
+plt.title('t-SNE visualization of Deep Learning features')
 figD.savefig('../plots/tsne_dl', dpi=1000)
 
 end = time.time()
